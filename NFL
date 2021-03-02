@@ -1,0 +1,43 @@
+"""""
+Case-study #5 NFL
+Разработчики:
+Юдачев Никита 70%
+Кулешов Роман 30%
+"""""
+import urllib.request
+with open('input.txt') as f_in:
+    for url in f_in:
+        f = urllib.request.urlopen(url)
+        s = f.read()
+        text = str(s)
+        part_name = text.find("nfl-c-player-header__title")
+        name = text[text.find('>', part_name)+1:text.find('</h1', part_name)]
+        comp_tot = text.find('passingCompletions')
+        COMP = (text[text.find('                      ', comp_tot)+22:text.find('</th>', comp_tot)-22])
+        att_tot = text.find('passingAttempts')
+        ATT = (text[text.find('                      ', att_tot)+22:text.find('</th>', att_tot)-22])
+        yds_tot = text.find('passingYards')
+        YDS = (text[text.find('                      ', yds_tot)+22:text.find('</th>', yds_tot)-22])
+        td_tot = text.find('passingTouchdowns')
+        TD = (text[text.find('                      ', td_tot)+22:text.find('</th>', td_tot)-22])
+        int_tot = text.find('passingInterceptions')
+        INT = (text[text.find('                      ', int_tot)+22:text.find('</th>', int_tot)-22])
+        ATT1 = int(ATT)
+        COMP1 = int(COMP)
+        YDS1 = int(YDS)
+        TD1 = int(TD)
+        INT1 = int(INT)
+        C = ((COMP1/ATT1)*100-30)/20
+        Y = ((YDS1/ATT1)-3)*0.25
+        T = (TD1/ATT1)*20
+        I = 2.375-((INT1/ATT1)*25)
+        b = ((C+Y+I+T)*100)/6
+        RATE = float('{:.2f}'.format(b))
+        with open('output.txt', 'a') as f_out:
+            f_out.write(name.ljust(20))
+            f_out.write(COMP.ljust(7))
+            f_out.write(ATT.ljust(7))
+            f_out.write(YDS.ljust(7))
+            f_out.write(TD.ljust(7))
+            f_out.write(INT.ljust(7))
+            f_out.write(str(RATE).ljust(7)+'\n')
